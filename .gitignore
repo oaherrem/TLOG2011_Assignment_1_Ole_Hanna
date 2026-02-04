@@ -1,2 +1,4 @@
-/data
+# Private data (do not share)
+data/*
+!data/README.md
 
