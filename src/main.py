@@ -33,6 +33,14 @@ print("Feature matrix shape:", X_direct.shape)
 print(X_direct.head())
 
 # Feature engineering (2.4.2)
-X_feature = add_engineered_features(data)
-print("Feature matrix with engineered features shape:", X_feature.shape)
-print(X_feature.head())
+X_engineerd = add_engineered_features(data)
+print("Feature matrix with engineered features shape:", X_engineerd.shape)
+print(X_engineerd.head())
+
+# Combine direct and engineered features
+engineered_cols = [c for c in X_engineerd.columns if c not in X_direct.columns]
+X_engineerd = X_engineerd[engineered_cols]
+
+X = X_direct.join(X_engineerd)
+print("Final feature matrix shape:", X.shape)
+print(X.head())
