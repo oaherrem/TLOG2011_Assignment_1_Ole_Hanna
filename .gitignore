@@ -1,4 +1,4 @@
 # Private data (do not share)
 data/*
 !data/README.md
-
+__pychache__
