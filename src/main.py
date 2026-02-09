@@ -9,6 +9,7 @@ from preprocessing import (
     check_timestamp_consistency
 )
 from features import select_direct_features
+from features import add_engineered_features
 
 
 # Finn datasett
@@ -26,9 +27,12 @@ data = check_timestamp_consistency(data)
 print(data.shape)
 print(data.head(5))
 
-
-
 # Feature selection (2.4.1)
-X = select_direct_features(data)
-print("Feature matrix shape:", X.shape)
-print(X.head())
+X_direct = select_direct_features(data)
+print("Feature matrix shape:", X_direct.shape)
+print(X_direct.head())
+
+# Feature engineering (2.4.2)
+X_feature = add_engineered_features(data)
+print("Feature matrix with engineered features shape:", X_feature.shape)
+print(X_feature.head())
