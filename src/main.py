@@ -44,10 +44,9 @@ X_engineered = X_engineered[engineered_cols]
 
 # Final feature dataframe
 X = X_direct.join(X_engineered)
-
+#print(X.head())
 
 # Target variable (2.5)
-# IMPORTANT: use raw timestamps in the same scale (no datetime arithmetic)
 data["estimate_arrived_time"] = pd.to_numeric(data["estimate_arrived_time"])
 data["order_push_time"] = pd.to_numeric(data["order_push_time"])
 
@@ -110,14 +109,14 @@ rf_model = train_random_forest(X_train, y_train)
 gb_model = train_gradient_boosting(X_train, y_train)
 
 # Evaluate model (2.5)
-metrics = evaluate_classification(model, X_test, y_test)
+lr_metrics = evaluate_classification(model, X_test, y_test)
 
 print("Model evaluation results:")
-print(f"Accuracy:  {metrics['accuracy']:.3f}")
-print(f"Precision: {metrics['precision']:.3f}")
-print(f"Recall:    {metrics['recall']:.3f}")
+print(f"Accuracy:  {lr_metrics['accuracy']:.3f}")
+print(f"Precision: {lr_metrics['precision']:.3f}")
+print(f"Recall:    {lr_metrics['recall']:.3f}")
 print("Confusion Matrix:")
-print(metrics["confusion_matrix"])
+print(lr_metrics["confusion_matrix"])
 
 
 rf_metrics = evaluate_classification(rf_model, X_test, y_test)
@@ -138,3 +137,36 @@ print(f"Precision: {gb_metrics['precision']:.3f}")
 print(f"Recall:    {gb_metrics['recall']:.3f}")
 print("Confusion Matrix:")
 print(gb_metrics["confusion_matrix"])
+
+# Visualize results. look in results-folder for saved images
+from visualize import plot_confusion_matrix, plot_model_comparison
+import os
+
+os.makedirs("results", exist_ok=True)
+
+plot_confusion_matrix(
+    lr_metrics["confusion_matrix"],
+    "Logistic Regression – Confusion Matrix",
+    "results/confusion_matrix_lr.png"
+)
+
+plot_confusion_matrix(
+    rf_metrics["confusion_matrix"],
+    "Random Forest – Confusion Matrix",
+    "results/confusion_matrix_rf.png"
+)
+
+plot_confusion_matrix(
+    gb_metrics["confusion_matrix"],
+    "Gradient Boosting – Confusion Matrix",
+    "results/confusion_matrix_gb.png"
+)
+
+plot_model_comparison(
+    {
+        "Logistic Regression": lr_metrics,
+        "Random Forest": rf_metrics,
+        "Gradient Boosting": gb_metrics,
+    },
+    "results/model_comparison.png"
+)
