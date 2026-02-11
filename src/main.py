@@ -52,7 +52,7 @@ data["arrive_time"] = pd.to_numeric(data["arrive_time"])
 
 # tolerance
 tolerance_min = 0 #minutes
-tolerance_seconds = tolerance_min * 60
+tolerance_seconds = tolerance_min 
 
 data["late_delivery"] = (
     data["arrive_time"] > data["estimate_arrived_time"] + tolerance_seconds

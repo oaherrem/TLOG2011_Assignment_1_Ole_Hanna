@@ -49,20 +49,21 @@ def to_unix_seconds(series: pd.Series) -> pd.Series:
     return series
 
 
+
 def add_engineered_features(data: pd.DataFrame) -> pd.DataFrame:
     data = data.copy()
 
     # --- Ensure Unix timestamps ---
-    data["platform_order_time_unix"] = to_unix_seconds(
+    data["platform_order_time_unix"] = (
         data["platform_order_time"]
     )
-    data["estimate_arrived_time_unix"] = to_unix_seconds(
+    data["estimate_arrived_time_unix"] = (
         data["estimate_arrived_time"]
     )
 
     # --- Time features from platform_order_time ---
     data["order_datetime"] = pd.to_datetime(
-        data["platform_order_time_unix"], unit="s"
+        data["platform_order_time"], unit="s"
     )
 
     data["order_hour"] = data["order_datetime"].dt.hour
@@ -93,9 +94,9 @@ def add_engineered_features(data: pd.DataFrame) -> pd.DataFrame:
 
     # --- Estimated meal preparation time (minutes) ---
     data["estimated_prep_time_minutes"] = (
-        data["estimate_meal_prepare_time"]
-        - data["platform_order_time_unix"]
-    ) / 60
+        pd.to_numeric(data["estimate_meal_prepare_time"], errors='coerce')
+        - pd.to_numeric(data["platform_order_time"],errors='coerce')
+    )/ 60
 
     data.loc[
         (data["estimated_prep_time_minutes"] < 0)
@@ -105,8 +106,8 @@ def add_engineered_features(data: pd.DataFrame) -> pd.DataFrame:
 
     # --- Estimated delivery duration (minutes) ---
     data["estimated_delivery_duration_minutes"] = (
-        data["estimate_arrived_time_unix"]
-        - data["platform_order_time_unix"]
+        pd.to_numeric(data["estimate_arrived_time"], errors='coerce')
+        - pd.to_numeric(data["platform_order_time"], errors='coerce')
     ) / 60
 
     # --- Cleanup ---
