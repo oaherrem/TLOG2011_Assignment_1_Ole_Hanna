@@ -1,7 +1,16 @@
 from sklearn.linear_model import LogisticRegression
 
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+
 def train_logistic_regression(X_train, y_train):
-    model = LogisticRegression(max_iter=1000)
+    model = Pipeline([
+        ("scaler", StandardScaler()),
+        ("lr", LogisticRegression(
+            max_iter= 1000,
+            class_weight= "balanced"
+        ))
+    ])
     model.fit(X_train, y_train)
     return model
 

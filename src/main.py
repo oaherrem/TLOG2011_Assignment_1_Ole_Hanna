@@ -95,7 +95,6 @@ y_class = y_class.loc[valid_idx]
 platform_order_time = data.loc[valid_idx,"platform_order_time"]
 #order_push_time = data.loc[valid_idx, "order_push_time"]
 
-
 # Time-based train/test split (2.5)
 split_df = X_model.assign(
     #order_push_time=order_push_time,
@@ -104,6 +103,7 @@ split_df = X_model.assign(
 ).sort_values("platform_order_time")
 
 split_idx = int(0.8 * len(split_df))
+
 
 train_df = split_df.iloc[:split_idx]
 test_df = split_df.iloc[split_idx:]
@@ -181,3 +181,5 @@ plot_model_comparison(
     },
     "results/model_comparison.png"
 )
+
+

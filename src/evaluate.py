@@ -31,3 +31,4 @@ def evaluate_classification(model, X_test, y_test):
         "recall": recall,
         "confusion_matrix": cm,
     }
+
