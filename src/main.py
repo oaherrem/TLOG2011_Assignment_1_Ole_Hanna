@@ -51,11 +51,11 @@ data["estimate_arrived_time"] = pd.to_numeric(data["estimate_arrived_time"])
 data["arrive_time"] = pd.to_numeric(data["arrive_time"])
 
 # tolerance
-tolerance_min = 0 #minutes
-tolerance_seconds = tolerance_min 
+tolerance_min = 8 #minutes
+#tolerance_seconds = tolerance_min
 
 data["late_delivery"] = (
-    data["arrive_time"] > data["estimate_arrived_time"] + tolerance_seconds
+    data["arrive_time"] > data["estimate_arrived_time"] + tolerance_min
 ).astype(int)
 
 y_class = data["late_delivery"]
@@ -150,7 +150,7 @@ print("Confusion Matrix:")
 print(gb_metrics["confusion_matrix"])
 
 # Visualize results. look in results-folder for saved images
-from visualize import plot_confusion_matrix, plot_model_comparison
+from visualize import plot_confusion_matrix, plot_model_comparison, plot_roc_curves
 import os
 
 os.makedirs("results", exist_ok=True)
@@ -182,4 +182,10 @@ plot_model_comparison(
     "results/model_comparison.png"
 )
 
+models = {
+    "Logistic Regression": model,
+    "Random Forest": rf_model,
+    "Gradient Boosting": gb_model,
+}
 
+plot_roc_curves(models, X_test, y_test)
