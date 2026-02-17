@@ -28,6 +28,7 @@ def train_random_forest(X_train, y_train):
     return model
 
 from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.utils.class_weight import compute_sample_weight
 
 def train_gradient_boosting(X_train, y_train):
     model = GradientBoostingClassifier(
@@ -36,5 +37,6 @@ def train_gradient_boosting(X_train, y_train):
         max_depth=3,
         random_state=42
     )
-    model.fit(X_train, y_train)
+    sample_weight = compute_sample_weight(class_weight="balanced", y=y_train)
+    model.fit(X_train, y_train, sample_weight=sample_weight)
     return model

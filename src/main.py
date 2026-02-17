@@ -11,6 +11,10 @@ from features import select_direct_features, add_engineered_features
 from train import train_logistic_regression, train_random_forest, train_gradient_boosting
 from evaluate import evaluate_classification
 
+#Thresold tuning
+PREDICTION_THRESHOLD = 0.60
+
+
 # Load data
 BASE_DIR = Path(__file__).resolve().parent
 DATA_PATH = BASE_DIR.parent / "data" / "all_waybill_info_meituan_0322.csv"
@@ -118,6 +122,12 @@ y_test = test_df["y_class"]
 model = train_logistic_regression(X_train, y_train)
 rf_model = train_random_forest(X_train, y_train)
 gb_model = train_gradient_boosting(X_train, y_train)
+
+print("Train class distribution:")
+print(y_train.value_counts(normalize=True))
+
+print("Test class distribution:")
+print(y_test.value_counts(normalize=True))
 
 # Evaluate model (2.5)
 lr_metrics = evaluate_classification(model, X_test, y_test)
