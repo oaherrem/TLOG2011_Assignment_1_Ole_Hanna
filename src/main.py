@@ -64,12 +64,6 @@ data["late_delivery"] = (
 
 y_class = data["late_delivery"]
 
-#y = (data["estimate_arrived_time"] - data["order_push_time"]) / 60
-# Binary classification target: late delivery
-#LATE_THRESHOLD = 45  # minutes
-#y_class = (y > LATE_THRESHOLD).astype(int)
-
-
 # Feature matrix for model
 feature_cols = [
     "is_prebook",
@@ -97,11 +91,9 @@ valid_idx = X_model.notna().all(axis=1) & y_class.notna()
 X_model = X_model.loc[valid_idx]
 y_class = y_class.loc[valid_idx]
 platform_order_time = data.loc[valid_idx,"platform_order_time"]
-#order_push_time = data.loc[valid_idx, "order_push_time"]
 
 # Time-based train/test split (2.5)
 split_df = X_model.assign(
-    #order_push_time=order_push_time,
     platform_order_time = platform_order_time,
     y_class=y_class
 ).sort_values("platform_order_time")
